@@ -15,7 +15,7 @@ const request = {
 const Weather = {
   get: (lon, lat) =>
     request.get(
-      `/info?lat=${lat}&lon=${lon}&apiKey=${process.env.WEATHER_API_KEY}`
+      `/info?lat=${lat}&lon=${lon}&apiKey=${process.env.REACT_APP_WEATHER_API_KEY}`
     ),
   history: (limit) => request.get(`/history?limit=${limit}`),
 };
