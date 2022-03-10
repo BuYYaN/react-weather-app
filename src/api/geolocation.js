@@ -14,13 +14,4 @@ const Geo = {
   },
 };
 
-// getCurrPosition: () =>
-//   navigator.geolocation.getCurrentPosition(({ coords }) => {
-//     console.log(coords);
-//   }, Geo.displayError),
-// getCurrCoords: ({ coords }) => {
-//   console.log(
-//     Geo.getCurrPosition((pos) => console.log(pos), this.displayError)
-//   );
-// },
 export default Geo;

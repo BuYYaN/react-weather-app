@@ -29,7 +29,7 @@ const GoogleMap = ({
   return (
     <div style={styles}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyAnzpQmtvD9JK_qcY16unM333WlyIVP6zs" }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAP_API_KEY }}
         center={currCoords}
         defaultZoom={14}
         onClick={handleMapClick}
