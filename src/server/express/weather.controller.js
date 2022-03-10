@@ -1,15 +1,16 @@
 const { default: axios } = require("axios");
+const { v4: uuidv4 } = require("uuid");
 const db = require("../firebase");
 
 const getWeatherHistory = async (req, res) => {
-  const limit = req.query.limit;
+  const limit = req.query.limit ?? Infinity;
 
   const weatherRef = db.collection("weather-history");
   const snapshot = await weatherRef.get();
 
   const historyArr = [];
 
-  snapshot.forEach((doc, index) => {
+  snapshot.forEach((doc) => {
     historyArr.push(doc.data());
   });
 
@@ -30,6 +31,7 @@ const getWeatherInfo = async (req, res) => {
     const formattedData = {
       lon,
       lat,
+      id: uuidv4(),
       temp: data.main.temp,
       clouds: data.clouds.all,
       wind: data.wind.speed,

@@ -1,7 +1,8 @@
 import GoogleMapReact from "google-map-react";
-import { useEffect } from "react";
 import { connect } from "react-redux";
-import { MAP_CLICKED } from "../redux/actionTypes";
+import Weather from "../agent";
+import { MAP_CLICKED, UPDATE_HISTORY } from "../redux/actionTypes";
+import Marker from "./Marker";
 
 //AIzaSyAnzpQmtvD9JK_qcY16unM333WlyIVP6zs
 
@@ -10,28 +11,50 @@ const styles = {
   height: "70vh",
 };
 
-const GoogleMap = ({ currCoords, onMapClicked, clickedCoords }) => {
-  const handleMapClick = (e) => onMapClicked({ lat: e.lat, lng: e.lng });
+const GoogleMap = ({
+  currCoords,
+  onMapClicked,
+  onDataFetched,
+  currentWeatherData,
+  weatherHistory,
+}) => {
+  const handleMapClick = async (e) => {
+    onMapClicked({ lng: e.lng, lat: e.lat });
+
+    const { data } = await Weather.get(e.lng, e.lat);
+
+    onDataFetched(data);
+  };
 
   return (
     <div style={styles}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyAnzpQmtvD9JK_qcY16unM333WlyIVP6zs" }}
-        defaultCenter={currCoords}
-        center={clickedCoords}
+        center={currCoords}
         defaultZoom={14}
         onClick={handleMapClick}
-      />
+      >
+        {weatherHistory.length > 0 && (
+          <Marker
+            weatherData={currentWeatherData}
+            lat={currCoords.lat}
+            lng={currCoords.lng}
+          />
+        )}
+      </GoogleMapReact>
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  clickedCoords: state.map.clickedCoords,
+  currCoords: state.map.currCoords,
+  weatherHistory: state.map.weatherHistory,
+  currentWeatherData: state.map.currentWeatherData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onMapClicked: (coords) => dispatch({ type: MAP_CLICKED, payload: coords }),
+  onDataFetched: (data) => dispatch({ type: UPDATE_HISTORY, payload: data }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleMap);

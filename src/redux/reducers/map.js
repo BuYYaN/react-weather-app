@@ -1,8 +1,9 @@
-import { MAP_CLICKED, MAP_LOADED } from "../actionTypes";
+import { MAP_CLICKED, MAP_LOADED, UPDATE_HISTORY } from "../actionTypes";
 
 const initialState = {
-  clickedCoords: null,
   currCoords: null,
+  weatherHistory: [],
+  currentWeatherData: null,
 };
 
 const mapReducer = (state = initialState, action) => {
@@ -15,7 +16,14 @@ const mapReducer = (state = initialState, action) => {
     case MAP_CLICKED:
       return {
         ...state,
-        clickedCoords: action.payload,
+        currCoords: action.payload,
+        currentWeatherData: null,
+      };
+    case UPDATE_HISTORY:
+      return {
+        ...state,
+        weatherHistory: [...state.weatherHistory, action.payload],
+        currentWeatherData: action.payload,
       };
     default:
       return state;
