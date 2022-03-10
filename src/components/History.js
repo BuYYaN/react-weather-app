@@ -1,7 +1,13 @@
-import React from "react";
+import ListHistory from "./ListHistory";
+import Statistics from "./Statistics";
 
 const History = () => {
-  return <div>History</div>;
+  return (
+    <>
+      <Statistics />
+      <ListHistory />
+    </>
+  );
 };
 
 export default History;
