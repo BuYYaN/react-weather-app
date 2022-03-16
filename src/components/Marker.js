@@ -29,12 +29,16 @@ const closeBtnStyles = {
   color: "white",
 };
 
-const Marker = ({ weatherData }) => {
+const Marker = ({ weatherData, setIsModalOpen }) => {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
     setOpen(true);
   }, [weatherData]);
+
+  useEffect(() => {
+    !open && setIsModalOpen(false);
+  }, [open, setIsModalOpen]);
 
   const capitalizeFirstLetter = (string) =>
     string[0].toUpperCase() + string.slice(1);

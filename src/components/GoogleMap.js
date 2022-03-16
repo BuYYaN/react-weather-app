@@ -1,4 +1,5 @@
 import GoogleMapReact from "google-map-react";
+import { useState } from "react";
 import { connect } from "react-redux";
 import Weather from "../agent";
 import { MAP_CLICKED, UPDATE_HISTORY } from "../redux/actionTypes";
@@ -16,7 +17,10 @@ const GoogleMap = ({
   currentWeatherData,
   weatherHistory,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleMapClick = async (e) => {
+    setIsModalOpen(true);
     onMapClicked({ lng: e.lng, lat: e.lat });
 
     const { data } = await Weather.get(e.lng, e.lat);
@@ -34,8 +38,9 @@ const GoogleMap = ({
         defaultZoom={14}
         onClick={handleMapClick}
       >
-        {weatherHistory.length > 0 && (
+        {isModalOpen && (
           <Marker
+            setIsModalOpen={setIsModalOpen}
             weatherData={currentWeatherData}
             lat={currCoords.lat}
             lng={currCoords.lng}
