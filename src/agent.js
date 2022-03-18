@@ -1,23 +1,26 @@
 const { default: axios } = require("axios");
 
-const API_URL_ROOT =
+axios.defaults.baseURL =
   "https://react-weather-app-server.herokuapp.com/api/weather";
+
+const setApiKey = (config) => {
+  config.params.apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+  return config;
+};
 
 axios.interceptors.response.use(
   (response) => response.data,
   (error) => Promise.reject(error)
 );
 
-const request = {
-  get: (url) => axios.get(`${API_URL_ROOT}${url}`),
-};
+axios.interceptors.request.use(
+  (config) => setApiKey(config),
+  (error) => Promise.reject(error)
+);
 
 const Weather = {
-  get: (lon, lat) =>
-    request.get(
-      `/info?lat=${lat}&lon=${lon}&apiKey=${process.env.REACT_APP_WEATHER_API_KEY}`
-    ),
-  history: (limit) => request.get(`/history?limit=${limit}`),
+  get: (coords) => axios.get("/info", { params: { ...coords } }),
+  history: (limit) => axios.get("/history", { params: limit }),
 };
 
 export default Weather;

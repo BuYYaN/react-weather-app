@@ -23,7 +23,7 @@ const GoogleMap = ({
     setIsModalOpen(true);
     onMapClicked({ lng: e.lng, lat: e.lat });
 
-    const { data } = await Weather.get(e.lng, e.lat);
+    const { data } = await Weather.get({ lon: e.lng, lat: e.lat });
 
     onDataFetched(data);
   };
