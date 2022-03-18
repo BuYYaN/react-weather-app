@@ -1,17 +1,10 @@
 import { useEffect } from "react";
 import { connect } from "react-redux";
-import Geo from "../api/geolocation";
 import { MAP_LOADED } from "../redux/actionTypes";
-import GoogleMap from "./GoogleMap";
 import { CircularProgress } from "@mui/material";
-
-const styles = {
-  width: "100%",
-  height: "70vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
+import GoogleMap from "./GoogleMap";
+import Geo from "../api/geolocation";
+import styles from "./styles";
 
 const Home = ({ currCoords, onCoordsFetched }) => {
   useEffect(() => {
@@ -20,11 +13,13 @@ const Home = ({ currCoords, onCoordsFetched }) => {
     }
   }, [onCoordsFetched, currCoords]);
 
-  return currCoords ? (
-    <GoogleMap currCoords={currCoords} />
-  ) : (
-    <div style={styles}>
-      <CircularProgress />
+  return (
+    <div style={styles.ctn}>
+      {currCoords ? (
+        <GoogleMap currCoords={currCoords} />
+      ) : (
+        <CircularProgress />
+      )}
     </div>
   );
 };

@@ -20,7 +20,7 @@ axios.interceptors.request.use(
 
 const Weather = {
   get: (coords) => axios.get("/info", { params: { ...coords } }),
-  history: (limit) => axios.get("/history", { params: limit }),
+  history: (limit) => axios.get("/history", { params: { limit } }),
 };
 
 export default Weather;
