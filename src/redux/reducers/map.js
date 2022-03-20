@@ -6,7 +6,6 @@ const initialState = {
 };
 
 const mapReducer = (state = initialState, action) => {
-  console.log(action.payload);
   switch (action.type) {
     case MAP_LOADED:
       return {

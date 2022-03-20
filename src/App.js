@@ -17,7 +17,7 @@ const App = ({ onAppLoaded }) => {
       <Nav />
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route path="history" element={<History />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </BrowserRouter>
   );

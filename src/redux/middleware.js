@@ -6,7 +6,6 @@ const fetchMiddleware = (storeAPI) => (next) => (action) => {
 
     action.payload
       .then((data) => {
-        console.log(data);
         storeAPI.dispatch({ type: ASYNC_STOP, payload: data });
         storeAPI.dispatch({ type: action.type, payload: data });
       })
