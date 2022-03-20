@@ -7,6 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 const modalStyles = {
   position: "absolute",
@@ -74,4 +75,8 @@ const Marker = ({ weatherData, setIsModalOpen }) => {
   );
 };
 
-export default Marker;
+const mapStateToProps = (state) => ({
+  weatherData: state.map.weatherData,
+});
+
+export default connect(mapStateToProps)(Marker);

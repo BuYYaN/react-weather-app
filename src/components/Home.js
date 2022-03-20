@@ -6,30 +6,27 @@ import GoogleMap from "./GoogleMap";
 import Geo from "../api/geolocation";
 import styles from "./styles";
 
-const Home = ({ currCoords, onCoordsFetched }) => {
+const Home = ({ coords, handleCoordsFetched }) => {
   useEffect(() => {
-    if (!currCoords) {
-      Geo.getCurrentCoords(onCoordsFetched);
-    }
-  }, [onCoordsFetched, currCoords]);
+    if (coords) return;
+
+    Geo.getCurrentCoords(handleCoordsFetched);
+  }, [handleCoordsFetched, coords]);
 
   return (
     <div style={styles.ctn}>
-      {currCoords ? (
-        <GoogleMap currCoords={currCoords} />
-      ) : (
-        <CircularProgress />
-      )}
+      {coords ? <GoogleMap /> : <CircularProgress />}
     </div>
   );
 };
 
 const mapStateToProps = (state) => ({
-  currCoords: state.map.currCoords,
+  coords: state.map.coords,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onCoordsFetched: (coords) => dispatch({ type: MAP_LOADED, payload: coords }),
+  handleCoordsFetched: (coords) =>
+    dispatch({ type: MAP_LOADED, payload: coords }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

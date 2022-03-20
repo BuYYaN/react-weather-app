@@ -1,29 +1,31 @@
-import { MAP_CLICKED, MAP_LOADED, UPDATE_HISTORY } from "../actionTypes";
+import { CLEAR_WEATHER_DATA, MAP_CLICKED, MAP_LOADED } from "../actionTypes";
 
 const initialState = {
-  currCoords: null,
-  weatherHistory: [],
-  currentWeatherData: null,
+  coords: null,
+  weatherData: null,
 };
 
 const mapReducer = (state = initialState, action) => {
+  console.log(action.payload);
   switch (action.type) {
     case MAP_LOADED:
       return {
         ...state,
-        currCoords: action.payload,
+        coords: action.payload,
       };
     case MAP_CLICKED:
       return {
         ...state,
-        currCoords: action.payload,
-        currentWeatherData: null,
+        coords: {
+          lat: action.payload.data.lat - 0 || action.payload.lat,
+          lng: action.payload.data.lon - 0 || action.payload.lng,
+        },
+        weatherData: action.payload.data || state.weatherData,
       };
-    case UPDATE_HISTORY:
+    case CLEAR_WEATHER_DATA:
       return {
         ...state,
-        weatherHistory: [...state.weatherHistory, action.payload],
-        currentWeatherData: action.payload,
+        weatherData: null,
       };
     default:
       return state;

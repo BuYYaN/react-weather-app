@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  CircularProgress,
   Pagination,
   Accordion,
   AccordionSummary,
@@ -8,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Weather from "../agent";
 
 const styles = {
   display: "flex",
@@ -17,21 +15,9 @@ const styles = {
   width: "100%",
 };
 
-const ListHistory = () => {
-  const [history, setHistory] = useState([]);
-  const [filteredHistory, setFilteredHistory] = useState([]);
+const ListHistory = ({ stats: { weatherHistory: history } }) => {
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    async function fetchData() {
-      setHistory(await Weather.history(Infinity));
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    setFilteredHistory(history.slice(0, 10));
-  }, [history]);
+  const [filteredHistory, setFilteredHistory] = useState(history.slice(0, 10));
 
   const handleChange = (e, val) => {
     setFilteredHistory([...history].splice((val - 1) * 10, 10));
@@ -41,27 +27,25 @@ const ListHistory = () => {
   const capitalizeFirstLetter = (string) =>
     string[0].toUpperCase() + string.slice(1);
 
-  return filteredHistory ? (
+  return (
     <>
-      <div>
-        {filteredHistory.map((el) => (
-          <Accordion key={el.id}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>{el.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Temperature: {(el.temp - 273.15).toFixed(1)}℃
-              </Typography>
-              <Typography>Cloudiness: {el.clouds}%</Typography>
-              <Typography>Wind: {el.wind}m/s</Typography>
-              <Typography>
-                Description: {capitalizeFirstLetter(el.description)}
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </div>
+      {filteredHistory.map((el) => (
+        <Accordion key={el.id}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{el.name}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography>
+              Temperature: {(el.temp - 273.15).toFixed(1)}℃
+            </Typography>
+            <Typography>Cloudiness: {el.clouds}%</Typography>
+            <Typography>Wind: {el.wind}m/s</Typography>
+            <Typography>
+              Description: {capitalizeFirstLetter(el.description)}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
       <Pagination
         style={styles}
         count={((history.length + 10) / 10).toFixed() - 0}
@@ -70,8 +54,6 @@ const ListHistory = () => {
         onChange={handleChange}
       />
     </>
-  ) : (
-    <CircularProgress style={styles} />
   );
 };
 

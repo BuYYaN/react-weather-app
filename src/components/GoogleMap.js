@@ -1,56 +1,43 @@
 import { useState } from "react";
 import { connect } from "react-redux";
-import { MAP_CLICKED, UPDATE_HISTORY } from "../redux/actionTypes";
+import { CLEAR_WEATHER_DATA, MAP_CLICKED } from "../redux/actionTypes";
 import Weather from "../agent";
 import Marker from "./Marker";
 import GoogleMapReact from "google-map-react";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
-const GoogleMap = ({
-  currCoords,
-  onMapClicked,
-  onDataFetched,
-  currentWeatherData,
-  weatherHistory,
-}) => {
+const GoogleMap = ({ coords, handleMapClick, clearData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCoords, setCurrentCoords] = useState(coords);
 
-  const handleMapClick = async (e) => {
+  const handleMapClicked = ({ lng, lat }) => {
+    clearData();
     setIsModalOpen(true);
-    onMapClicked({ lng: e.lng, lat: e.lat });
-
-    const { data } = await Weather.get({ lon: e.lng, lat: e.lat });
-
-    onDataFetched(data);
+    setCurrentCoords({ lng, lat });
+    handleMapClick({ lat, lon: lng });
   };
 
   return (
     <GoogleMapReact
       bootstrapURLKeys={{ key: API_KEY }}
-      center={currCoords}
+      center={currentCoords}
       defaultZoom={14}
-      onClick={handleMapClick}
+      onClick={handleMapClicked}
     >
-      {isModalOpen && (
-        <Marker
-          setIsModalOpen={setIsModalOpen}
-          weatherData={currentWeatherData}
-        />
-      )}
+      {isModalOpen && <Marker setIsModalOpen={setIsModalOpen} />}
     </GoogleMapReact>
   );
 };
 
 const mapStateToProps = (state) => ({
-  currCoords: state.map.currCoords,
-  weatherHistory: state.map.weatherHistory,
-  currentWeatherData: state.map.currentWeatherData,
+  coords: state.map.coords,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onMapClicked: (coords) => dispatch({ type: MAP_CLICKED, payload: coords }),
-  onDataFetched: (data) => dispatch({ type: UPDATE_HISTORY, payload: data }),
+  handleMapClick: (coords) =>
+    dispatch({ type: MAP_CLICKED, payload: Weather.get(coords) }),
+  clearData: () => dispatch({ type: CLEAR_WEATHER_DATA }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleMap);
