@@ -26,11 +26,11 @@ const History = ({ history, onLoad }) => {
 
 const mapStateToProps = (state) => ({ history: state.stats.history });
 
-const mapDisptachToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch) => ({
   onLoad: dispatch({
     type: UPDATE_HISTORY,
     payload: Weather.history(),
   }),
 });
 
-export default connect(mapStateToProps, mapDisptachToProps)(History);
+export default connect(mapStateToProps, mapDispatchToProps)(History);
