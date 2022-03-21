@@ -48,7 +48,7 @@ const ListHistory = ({ stats: { weatherHistory: history } }) => {
       ))}
       <Pagination
         style={styles}
-        count={((history.length + 10) / 10).toFixed() - 0}
+        count={Math.floor((history.length + 10) / 10) - 0}
         color="primary"
         page={page}
         onChange={handleChange}
