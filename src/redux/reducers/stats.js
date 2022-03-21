@@ -1,4 +1,4 @@
-import { APP_LOADED } from "../actionTypes";
+import { APP_LOADED, UPDATE_HISTORY } from "../actionTypes";
 
 const initialState = {
   history: [],
@@ -7,10 +7,10 @@ const initialState = {
 const statsReducer = (state = initialState, action) => {
   switch (action.type) {
     case APP_LOADED:
+    case UPDATE_HISTORY:
       return {
         history: action.payload,
       };
-
     default:
       return state;
   }
